@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="nz.rausch.contact.http.HttpContextTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-01-27T13:40:01" hostname="DESKTOP-1CL9COK" time="0.402">
+<testsuite name="nz.rausch.contact.http.HttpContextTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2020-01-27T14:24:53" hostname="DESKTOP-1CL9COK" time="0.002">
   <properties/>
-  <testcase name="test1" classname="nz.rausch.contact.http.HttpContextTest" time="0.402"/>
-  <system-out><![CDATA[SETUP
-]]></system-out>
+  <testcase name="checkSingleParamReturnsTrueWhenParamExists" classname="nz.rausch.contact.http.HttpContextTest" time="0.001"/>
+  <testcase name="checkMultiParamReturnsFalseWhenOneDoesntExist" classname="nz.rausch.contact.http.HttpContextTest" time="0.0"/>
+  <testcase name="checkMultiParamReturnsFalseWhenOneNoneExist" classname="nz.rausch.contact.http.HttpContextTest" time="0.0"/>
+  <testcase name="checkMultiParamReturnsTrueWhenAllExist" classname="nz.rausch.contact.http.HttpContextTest" time="0.0"/>
+  <testcase name="checkSingleParamReturnsTrueWhenParamDoesntExist" classname="nz.rausch.contact.http.HttpContextTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
