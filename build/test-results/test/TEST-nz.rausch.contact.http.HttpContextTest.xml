@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="nz.rausch.contact.http.HttpContextTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-01-27T13:40:01" hostname="DESKTOP-1CL9COK" time="0.402">
+  <properties/>
+  <testcase name="test1" classname="nz.rausch.contact.http.HttpContextTest" time="0.402"/>
+  <system-out><![CDATA[SETUP
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
