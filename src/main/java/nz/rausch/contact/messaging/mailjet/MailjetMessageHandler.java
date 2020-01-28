@@ -15,9 +15,6 @@ import nz.rausch.contact.messaging.MessageHandler;
 import nz.rausch.contact.messaging.exceptions.MessageSendException;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import sun.security.krb5.Config;
-
-import java.io.IOException;
 
 public class MailjetMessageHandler implements MessageHandler {
     private static final String SUBJECT = "Contact Form Message";

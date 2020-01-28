@@ -55,10 +55,8 @@ public class Message {
      * @throws ValidationException If the email is invalid
      */
     public Message setSenderAddress(String senderAddress) throws ValidationException {
-        EmailValidator validator = EmailValidator.getInstance();
-
-        if (!validator.isValid(senderAddress)) {
-            throw new ValidationException("Invalid Email Supplied (" + senderAddress + ")");
+        if (!EmailValidator.getInstance().isValid(senderAddress)) {
+            throw new ValidationException("Invalid 'senderAddress' Email Supplied (" + senderAddress + ")");
         }
 
         this.senderAddress = senderAddress;
@@ -72,10 +70,8 @@ public class Message {
      * @throws ValidationException If the email is invalid
      */
     public Message setToAddress(String toAddress) throws ValidationException {
-        EmailValidator validator = EmailValidator.getInstance();
-
-        if (!validator.isValid(toAddress)) {
-            throw new ValidationException("Invalid Email Supplied (" + toAddress + ")");
+        if (!EmailValidator.getInstance().isValid(toAddress)) {
+            throw new ValidationException("Invalid 'toAddress' Email Supplied (" + toAddress + ")");
         }
 
         this.toAddress = toAddress;
