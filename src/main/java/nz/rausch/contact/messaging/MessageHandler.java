@@ -1,4 +1,7 @@
 package nz.rausch.contact.messaging;
 
-public interface IMessageHandler {
+import nz.rausch.contact.messaging.exceptions.MessageSendException;
+
+public interface MessageHandler  {
+    void send(Message message) throws MessageSendException;
 }

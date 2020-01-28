@@ -1,4 +1,4 @@
-package nz.rausch.contact.configuration;
+package nz.rausch.contact.configuration.models;
 
 public class MailjetConfig {
     private String publicKey;

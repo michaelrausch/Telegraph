@@ -68,4 +68,46 @@ public abstract class HttpContext {
      * @return This HTTP Context
      */
     public abstract HttpContext resultJson(String resultString);
+
+    /**
+     * Sends a 200 status code, along with a generic server error message
+     * @return This HTTP Context
+     */
+    public HttpContext badRequest() {
+        setStatus(400);
+        result("Bad Request");
+        return this;
+    }
+
+    /**
+     * Sends a 200 status code, along with a generic server error message
+     * @return This HTTP Context
+     */
+    public HttpContext ok() {
+        setStatus(200);
+        result("OK");
+        return this;
+    }
+
+    /**
+     * Sends a 200 status code, along with a generic server error message
+     * @return This HTTP Context
+     */
+    public HttpContext serverError() {
+        setStatus(500);
+        result("Internal Server Error");
+        return this;
+    }
+
+    /**
+     * Sends a 202 status code, along with a generic server error message.
+     * This shows that the request has been accepted, but has not been processed yet and that an error has
+     * the potential to occur later.
+     * @return This HTTP Context
+     */
+    public HttpContext accept() {
+        setStatus(202);
+        result("OK");
+        return this;
+    }
 }

@@ -1,33 +1,29 @@
-package nz.rausch.contact.configuration;
+package nz.rausch.contact.configuration.loader;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import nz.rausch.contact.configuration.exception.ConfigLoadException;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+public abstract class ConfigLoader<E> {
+    private E configuration;
+    private String configFile;
 
-public abstract class ConfigLoader {
-    private AppConfig appConfig;
-    private final String CONFIG_FILE = "config.yaml";
-
-    private ConfigLoader() throws IOException {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        File file = new File("config.yaml");
-
-        ObjectMapper om = new ObjectMapper(new YAMLFactory());
-
-        appConfig = om.readValue(file, AppConfig.class);
+    public E getConfig() throws ConfigLoadException {
+        if (configuration == null) throw new ConfigLoadException("Configuration accessed before it has been loaded");
+        return configuration;
     }
 
-    public static ConfigLoader getInstance() throws IOException {
-        if (instance == null) {
-            instance = new ConfigLoader();
-        }
-        return instance;
+    public void setConfigFile(String configFile) {
+        this.configFile = configFile;
     }
 
-    public AppConfig getAppConfig() {
-        return appConfig;
+    protected String getConfigFile() {
+        return configFile;
+    }
+
+    public abstract ConfigLoader<E> load(Class<E> clazz) throws ConfigLoadException;
+
+    protected void setConfiguration(E configuration) {
+        this.configuration = configuration;
     }
 }
+
+

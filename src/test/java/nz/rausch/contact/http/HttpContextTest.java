@@ -2,19 +2,23 @@ package nz.rausch.contact.http;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 public class HttpContextTest {
     HttpContext context;
-
+    HttpContext spyContext;
 
     @Before
     public void setup() {
         context = new MockHttpContext();
+        spyContext = spy(context);
     }
 
     @Test
@@ -59,8 +63,25 @@ public class HttpContextTest {
         assertEquals(false, result);
     }
 
-    private class MockHttpContext extends HttpContext {
+    @Test
+    public void checkBadRequestSetsStatusCode() {
+        spyContext.badRequest();
+        verify(spyContext).setStatus(400);
+    }
 
+    @Test
+    public void checkOkSetsStatusCode() {
+        spyContext.ok();
+        verify(spyContext).setStatus(200);
+    }
+
+    @Test
+    public void checkServerErrorSetsStatusCode() {
+        spyContext.serverError();
+        verify(spyContext).setStatus(500);
+    }
+
+    private class MockHttpContext extends HttpContext {
         @Override
         public String getIp() {
             return null;
