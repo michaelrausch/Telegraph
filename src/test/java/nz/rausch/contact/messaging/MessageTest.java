@@ -78,4 +78,34 @@ public class MessageTest {
         assertEquals(validEmail, message.getToAddress());
     }
 
+    @Test
+    public void checkMessageCorrectlyFormattedAsHtml() throws ValidationException {
+        String name = "bob";
+        String email = "bob@example.com";
+        String msg = "This is a test";
+
+        String expectedHtml = "<h3>Message From " + name + " (" + email + ")</h3><br/><br/>" + msg;
+
+        message.setName(name);
+        message.setSenderAddress(email);
+        message.setMessage(msg);
+
+        assertEquals(expectedHtml, message.asHtml());
+    }
+
+    @Test
+    public void checkToStringCorrectlyFormatted() throws ValidationException {
+        String name = "bob";
+        String email = "bob@example.com";
+        String msg = "This is a test";
+
+        String expectedString = "Message From " + name + " (" + email + ")\n\n" + msg;
+
+        message.setName(name);
+        message.setSenderAddress(email);
+        message.setMessage(msg);
+
+        assertEquals(expectedString, message.toString());
+    }
+
 }

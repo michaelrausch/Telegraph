@@ -51,8 +51,8 @@ public class MailjetMessageHandler implements MessageHandler {
                 .put("Email", message.getToAddress())
                 .put("Name", configuration.getToName())))
                 .put(Emailv31.Message.SUBJECT, SUBJECT)
-                .put(Emailv31.Message.TEXTPART, formatMessagePlain(message))
-                .put(Emailv31.Message.HTMLPART, formatMessageHTML(message))));
+                .put(Emailv31.Message.TEXTPART, message.toString())
+                .put(Emailv31.Message.HTMLPART, message.asHtml())));
 
         try {
             response = client.post(request);
@@ -67,14 +67,4 @@ public class MailjetMessageHandler implements MessageHandler {
         }
     }
 
-    //@todo put into formatter module
-    private String formatMessageHTML(Message message) {
-        return "<h3>" + GREETING + " from " + message.getName() + " (" + message.getSenderAddress() + ")</h3>" +
-                "<br/>Message: <br/>" + message.getMessage();
-    }
-
-    private String formatMessagePlain(Message message) {
-        return GREETING + " from " + message.getName() + " (" + message.getSenderAddress() + ")\n" +
-                "Message: \n" + message.getMessage();
-    }
 }

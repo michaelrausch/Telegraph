@@ -78,6 +78,21 @@ public class Message {
         return this;
     }
 
+    /**
+     * Returns the message formatted in a HTML string.
+     * @return The message formatted as HTML.
+     */
+    public String asHtml() {
+        return "<h3>Message From " + this.getName() + " (" + this.getSenderAddress() + ")</h3>" +
+                "<br/><br/>" + getMessage();
+    }
+
+    @Override
+    public String toString() {
+        return "Message From " + this.getName() + " (" + this.getSenderAddress() + ")" +
+                "\n\n" + getMessage();
+    }
+
     public String getToAddress() {
         return toAddress;
     }

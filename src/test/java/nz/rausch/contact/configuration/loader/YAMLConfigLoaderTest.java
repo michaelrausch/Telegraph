@@ -34,29 +34,4 @@ public class YAMLConfigLoaderTest {
         loader.getConfig();
     }
 
-    private class TestConfigLoader extends YAMLConfigLoader<TestConfig> {
-        public TestConfigLoader() {
-            setConfigFile("src/test/resources/testconfig.yaml");
-        }
-    }
-
-    public static class TestConfig {
-        private String key;
-
-        public TestConfig() {
-
-        }
-
-        public TestConfig(String key) {
-            this.key = key;
-        }
-
-        public String getKey() {
-            return key;
-        }
-
-        public void setKey(String key) {
-            this.key = key;
-        }
-    }
 }
