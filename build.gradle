@@ -34,4 +34,12 @@ jacocoTestReport {
     }
 }
 
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'nz.rausch.contact.Server'
+    }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
 check.dependsOn jacocoTestReport
