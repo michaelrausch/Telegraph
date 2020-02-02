@@ -1,0 +1,7 @@
+toEmail: "your@email.com"
+toName: "Your Name"
+port: 8000
+
+mailjetConfig:
+  publicKey: "XXX"
+  privateKey: "YYY"
