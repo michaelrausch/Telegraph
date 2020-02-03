@@ -1,23 +1,25 @@
 package nz.rausch.contact.messaging;
 
+import nz.rausch.contact.Server;
 import nz.rausch.contact.messaging.exceptions.ValidationException;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.owasp.html.PolicyFactory;
 import org.owasp.html.Sanitizers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Message {
     private String name;
     private String message;
     private String senderAddress;
-    private String toAddress;
 
     private final PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
+    private static Logger logger = LoggerFactory.getLogger(Server.class.getName());
 
     public Message() {
         name = "";
         message = "";
         senderAddress = "";
-        toAddress = "";
     }
 
     /**
@@ -56,25 +58,11 @@ public class Message {
      */
     public Message setSenderAddress(String senderAddress) throws ValidationException {
         if (!EmailValidator.getInstance().isValid(senderAddress)) {
+            logger.debug("Email address validation failed on " + senderAddress);
             throw new ValidationException("Invalid 'senderAddress' Email Supplied (" + senderAddress + ")");
         }
 
         this.senderAddress = senderAddress;
-        return this;
-    }
-
-    /**
-     * Sets the email address of the person receiving the message. Email addresses must conform to the specification set out in @todo
-     * @param toAddress The recipients email address
-     * @return The message object
-     * @throws ValidationException If the email is invalid
-     */
-    public Message setToAddress(String toAddress) throws ValidationException {
-        if (!EmailValidator.getInstance().isValid(toAddress)) {
-            throw new ValidationException("Invalid 'toAddress' Email Supplied (" + toAddress + ")");
-        }
-
-        this.toAddress = toAddress;
         return this;
     }
 
@@ -91,10 +79,6 @@ public class Message {
     public String toString() {
         return "Message From " + this.getName() + " (" + this.getSenderAddress() + ")" +
                 "\n\n" + getMessage();
-    }
-
-    public String getToAddress() {
-        return toAddress;
     }
 
     public String getSenderAddress() {

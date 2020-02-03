@@ -10,6 +10,8 @@ import nz.rausch.contact.messaging.MessageHandler;
 import nz.rausch.contact.messaging.exceptions.MessageSendException;
 import nz.rausch.contact.messaging.exceptions.ValidationException;
 import nz.rausch.contact.messaging.mailjet.MailjetMessageHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +20,11 @@ public class ContactPostHandler implements HttpHandler {
     private static final String NAME = "name";
     private static final String MESSAGE = "message";
     private static final String EMAIL = "email";
+
     private final AppConfig configuration;
     private final RateLimiter rateLimiter;
     private final List<MessageHandler> messageHandlers;
+    private static Logger logger = LoggerFactory.getLogger(ContactPostHandler.class.getName());
 
     public ContactPostHandler(AppConfig config, RateLimiter rateLimiter){
         this.configuration = config;
@@ -33,14 +37,18 @@ public class ContactPostHandler implements HttpHandler {
         List<String> requiredParams = getRequiredMessageParameters();
         Message message = new Message();
 
+        logger.debug("New Request from IP " + ctx.getIp());
+
         if (!rateLimiter.shouldAllowAccess(ctx.getIp())){
             ctx.setStatus(429);
             ctx.result("Rate Limit Exceeded");
+            logger.info("Request from IP " + ctx.getIp() + " blocked, rate limit exceeded");
             return;
         }
 
         // Check required params exist
         if (!ctx.checkParamExists(requiredParams)) {
+            logger.debug("Request missing required parameters ");
             ctx.badRequest();
             return;
         }
@@ -49,9 +57,9 @@ public class ContactPostHandler implements HttpHandler {
         try {
             message.setName(ctx.getFormParameter(NAME))
                     .setMessage(ctx.getFormParameter(MESSAGE))
-                    .setSenderAddress(ctx.getFormParameter(EMAIL))
-                    .setToAddress(configuration.getToEmail());
+                    .setSenderAddress(ctx.getFormParameter(EMAIL));
         } catch (ValidationException e){
+            logger.debug("Request validation failed ");
             ctx.setStatus(400);
             ctx.result(e.getMessage());
             return;
@@ -61,22 +69,15 @@ public class ContactPostHandler implements HttpHandler {
         for (MessageHandler handler : messageHandlers) {
             try {
                 handler.send(message);
+                logger.debug("Message forwarded to handler " + handler.toString());
             } catch (MessageSendException e) {
                 ctx.serverError();
+                logger.error("Handler threw exception " + e.getMessage());
                 return;
             }
         }
 
-        ctx.accept();
-    }
-
-    /**
-     * Clears all current MessageHandlers and sets the default ones (Console and Mailjet)
-     */
-    public void setDefaultMessageHandlers() {
-        this.messageHandlers.clear();
-        messageHandlers.add(new ConsoleMessageHandler());
-        messageHandlers.add(new MailjetMessageHandler());
+        ctx.ok();
     }
 
     /**
@@ -84,8 +85,19 @@ public class ContactPostHandler implements HttpHandler {
      * @param messageHandlers A list of MessageHandlers
      */
     public void setMessageHandlers(List<MessageHandler> messageHandlers) {
+        logger.debug("Setting new message handlers ");
+
         this.messageHandlers.clear();
         this.messageHandlers.addAll(messageHandlers);
+    }
+
+    /**
+     * Add a message handler
+     * @param messageHandler The message handler
+     */
+    public void addMessageHandler(MessageHandler messageHandler) {
+        logger.debug("Adding new message handler {}", messageHandler.getClass().getName());
+        this.messageHandlers.add(messageHandler);
     }
 
     /**

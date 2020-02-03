@@ -1,11 +1,16 @@
 package nz.rausch.contact.http;
 
+import ch.qos.logback.classic.Logger;
+import nz.rausch.contact.Server;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 /**
  * Provides access to functions for handling the request and response
  */
 public abstract class HttpContext {
+
     /**
      * Get the IP Address from the request
      * @return The request IP address

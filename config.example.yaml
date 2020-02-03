@@ -1,10 +1,16 @@
-toEmail: "your@email.com"
-toName: "Your Name"
 port: 8000
 
 mailjetConfig:
-  publicKey: "XXX"
-  privateKey: "YYY"
+  enabled: false
+  publicKey: "PUBLIC_KEY"
+  privateKey: "PRIVATE_KEY"
+  recipientName: "YOUR_NAME_HERE"
+  mailToAddress: "YOUR_EMAIL_HERE"
+
+ifttt:
+  enabled: false
+  eventName: "EVENT_NAME"
+  privateKey: "PRIVATE_KEY"
 
 rateLimiter:
   cooldown: 1000

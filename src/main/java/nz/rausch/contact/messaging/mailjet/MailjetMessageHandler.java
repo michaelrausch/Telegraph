@@ -1,5 +1,6 @@
 package nz.rausch.contact.messaging.mailjet;
 
+import ch.qos.logback.classic.Logger;
 import com.mailjet.client.ClientOptions;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
@@ -7,32 +8,28 @@ import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.errors.MailjetException;
 import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.resource.Emailv31;
-import nz.rausch.contact.configuration.AppConfigLoader;
-import nz.rausch.contact.configuration.exception.ConfigLoadException;
-import nz.rausch.contact.configuration.models.AppConfig;
 import nz.rausch.contact.messaging.Message;
 import nz.rausch.contact.messaging.MessageHandler;
 import nz.rausch.contact.messaging.exceptions.MessageSendException;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.LoggerFactory;
 
 public class MailjetMessageHandler implements MessageHandler {
     private static final String SUBJECT = "Contact Form Message";
-    private static final String GREETING = "New contact form message";
 
     private MailjetClient client;
-    private static AppConfig configuration;
+    private MailjetConfig configuration;
+    private static Logger logger = (Logger) LoggerFactory.getLogger(MailjetMessageHandler.class.getName());
 
-    public MailjetMessageHandler() {
-        try {
-            configuration = new AppConfigLoader().load(AppConfig.class).getConfig();
-        } catch (ConfigLoadException e) {
-            return;
-        }
+    public MailjetMessageHandler(MailjetConfig config) {
+        this.configuration = config;
 
-        client = new MailjetClient(configuration.getMailjetConfig().getPublicKey(),
-                configuration.getMailjetConfig().getPrivateKey(),
+        client = new MailjetClient(configuration.getPublicKey(),
+                configuration.getPrivateKey(),
                 new ClientOptions("v3.1"));
+
+        logger.debug("Created new Mailjet client");
     }
 
     @Override
@@ -40,16 +37,23 @@ public class MailjetMessageHandler implements MessageHandler {
         MailjetRequest request;
         MailjetResponse response;
 
+        if (!configuration.getEnabled()) {
+            logger.debug("Mailjet disabled");
+            return;
+        }
+
+        logger.debug("Preparing to send new message from " + message.getSenderAddress());
+
         request = new MailjetRequest(Emailv31.resource)
                 .property(Emailv31.MESSAGES, new JSONArray()
                 .put(new JSONObject()
                 .put(Emailv31.Message.FROM, new JSONObject()
-                .put("Email", message.getToAddress())
-                .put("Name", message.getName()))
+                .put("Email", configuration.getMailToAddress())
+                .put("Name", configuration.getRecipientName()))
                 .put(Emailv31.Message.TO, new JSONArray()
                 .put(new JSONObject()
-                .put("Email", message.getToAddress())
-                .put("Name", configuration.getToName())))
+                .put("Email", configuration.getMailToAddress())
+                .put("Name", configuration.getRecipientName())))
                 .put(Emailv31.Message.SUBJECT, SUBJECT)
                 .put(Emailv31.Message.TEXTPART, message.toString())
                 .put(Emailv31.Message.HTMLPART, message.asHtml())));
@@ -57,11 +61,12 @@ public class MailjetMessageHandler implements MessageHandler {
         try {
             response = client.post(request);
         } catch (MailjetSocketTimeoutException | MailjetException e) {
-            e.printStackTrace();
+            logger.error("Mailjet Exception " + e.getMessage());
             throw new MessageSendException(e.getMessage());
         }
 
         if (response.getStatus() != 200) {
+            logger.error("Non-200 response from Mailjet got: " + response.getStatus());
             throw new MessageSendException("Invalid response code from Mailjet (Got " + response.getStatus() +
                     " " + response.getData());
         }

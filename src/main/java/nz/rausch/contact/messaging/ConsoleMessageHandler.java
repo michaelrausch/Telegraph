@@ -7,7 +7,6 @@ public class ConsoleMessageHandler implements MessageHandler {
     @Override
     public void send(Message message) {
         System.out.println("---- MESSAGE ----");
-        System.out.println("To: " + message.getToAddress());
         System.out.println("From: " + message.getSenderAddress());
         System.out.println("From: " + message.getName());
         System.out.println("Message: " + message.getMessage());

@@ -17,6 +17,7 @@ public class YAMLConfigLoader<E> extends ConfigLoader<E> {
         try {
             configuration = om.readValue(file, clazz);
         } catch (IOException e) {
+            e.printStackTrace();
             throw new ConfigLoadException("Could not read file " + file.getAbsolutePath());
         }
 

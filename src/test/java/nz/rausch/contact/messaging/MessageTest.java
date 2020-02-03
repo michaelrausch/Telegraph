@@ -64,20 +64,6 @@ public class MessageTest {
         assertEquals(validEmail, message.getSenderAddress());
     }
 
-    @Test(expected = ValidationException.class)
-    public void checkToAddressRejectedWhenInvalid() throws ValidationException {
-        String invalidEmail = "invalid@";
-        message.setToAddress(invalidEmail);
-    }
-
-    @Test
-    public void checkToAddressAcceptedWhenValid() throws ValidationException {
-        String validEmail = "test@test.co.nz";
-        message.setToAddress(validEmail);
-
-        assertEquals(validEmail, message.getToAddress());
-    }
-
     @Test
     public void checkMessageCorrectlyFormattedAsHtml() throws ValidationException {
         String name = "bob";

@@ -29,7 +29,6 @@ public class ContactPostHandlerTest {
 
         // Setup test config
         testConfig = new AppConfig();
-        testConfig.setToEmail("test@example.com");
 
         // Setup HttpContext mock
         when(context.getFormParameter("name")).thenReturn("Michael");
@@ -50,7 +49,7 @@ public class ContactPostHandlerTest {
 
         contactHandler.Handle(context);
 
-        verify(context).accept();
+        verify(context).ok();
     }
 
     @Test
@@ -110,4 +109,5 @@ public class ContactPostHandlerTest {
         verify(context).setStatus(429);
         verify(context).result("Rate Limit Exceeded");
     }
+
 }

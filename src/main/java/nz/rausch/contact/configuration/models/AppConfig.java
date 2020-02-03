@@ -1,29 +1,14 @@
 package nz.rausch.contact.configuration.models;
 
 import nz.rausch.contact.http.ratelimiter.RateLimiterConfiguration;
+import nz.rausch.contact.messaging.ifttt.IftttConfiguration;
+import nz.rausch.contact.messaging.mailjet.MailjetConfig;
 
 public class AppConfig {
-    private String toEmail;
-    private String toName;
     private MailjetConfig mailjetConfig;
     private RateLimiterConfiguration rateLimiter;
     private Integer port;
-
-    public String getToEmail() {
-        return toEmail;
-    }
-
-    public void setToEmail(String toEmail) {
-        this.toEmail = toEmail;
-    }
-
-    public String getToName() {
-        return toName;
-    }
-
-    public void setToName(String toName) {
-        this.toName = toName;
-    }
+    private IftttConfiguration ifttt;
 
     public MailjetConfig getMailjetConfig() {
         return mailjetConfig;
@@ -47,5 +32,13 @@ public class AppConfig {
 
     public void setRateLimiter(RateLimiterConfiguration rateLimiter) {
         this.rateLimiter = rateLimiter;
+    }
+
+    public IftttConfiguration getIfttt() {
+        return ifttt;
+    }
+
+    public void setIfttt(IftttConfiguration ifttt) {
+        this.ifttt = ifttt;
     }
 }
