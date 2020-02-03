@@ -10,7 +10,7 @@ import java.io.IOException;
 public class YAMLConfigLoader<E> extends ConfigLoader<E> {
     @Override
     public ConfigLoader<E> load(Class<E> clazz) throws ConfigLoadException {
-        E configuration = null;
+        E configuration;
         File file = new File(getConfigFile());
         ObjectMapper om = new ObjectMapper(new YAMLFactory());
 

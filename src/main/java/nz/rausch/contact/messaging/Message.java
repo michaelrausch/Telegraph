@@ -11,7 +11,7 @@ public class Message {
     private String senderAddress;
     private String toAddress;
 
-    private PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
+    private final PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
 
     public Message() {
         name = "";

@@ -4,7 +4,7 @@ import io.javalin.http.Context;
 import nz.rausch.contact.http.HttpContext;
 
 public class JavalinHttpContext extends HttpContext {
-    private Context context;
+    private final Context context;
 
     public JavalinHttpContext(Context context) {
         this.context = context;

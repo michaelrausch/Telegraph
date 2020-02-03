@@ -5,7 +5,7 @@ import nz.rausch.contact.http.HttpHandler;
 import nz.rausch.contact.http.HttpServer;
 
 public class JavalinHttpServer extends HttpServer {
-    private Javalin app;
+    private final Javalin app;
 
     public JavalinHttpServer(Integer port) {
         super(port);
@@ -19,16 +19,12 @@ public class JavalinHttpServer extends HttpServer {
 
     @Override
     public void get(String path, HttpHandler handler) {
-        app.get(path, ctx -> {
-            handler.Handle(new JavalinHttpContext(ctx));
-        });
+        app.get(path, ctx -> handler.Handle(new JavalinHttpContext(ctx)));
     }
 
     @Override
     public void post(String path, HttpHandler handler) {
-        app.post(path, ctx -> {
-            handler.Handle(new JavalinHttpContext(ctx));
-        });
+        app.post(path, ctx -> handler.Handle(new JavalinHttpContext(ctx)));
     }
 
 }

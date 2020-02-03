@@ -2,7 +2,6 @@ package nz.rausch.contact.http;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +80,7 @@ public class HttpContextTest {
         verify(spyContext).setStatus(500);
     }
 
-    private class MockHttpContext extends HttpContext {
+    private static class MockHttpContext extends HttpContext {
         @Override
         public String getIp() {
             return null;

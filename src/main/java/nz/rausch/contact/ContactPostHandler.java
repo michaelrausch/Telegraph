@@ -3,6 +3,7 @@ package nz.rausch.contact;
 import nz.rausch.contact.configuration.models.AppConfig;
 import nz.rausch.contact.http.HttpContext;
 import nz.rausch.contact.http.HttpHandler;
+import nz.rausch.contact.http.ratelimiter.RateLimiter;
 import nz.rausch.contact.messaging.ConsoleMessageHandler;
 import nz.rausch.contact.messaging.Message;
 import nz.rausch.contact.messaging.MessageHandler;
@@ -18,18 +19,25 @@ public class ContactPostHandler implements HttpHandler {
     private static final String MESSAGE = "message";
     private static final String EMAIL = "email";
     private final AppConfig configuration;
-    private List<MessageHandler> messageHandlers;
+    private final RateLimiter rateLimiter;
+    private final List<MessageHandler> messageHandlers;
 
-    public ContactPostHandler(AppConfig config){
+    public ContactPostHandler(AppConfig config, RateLimiter rateLimiter){
         this.configuration = config;
         this.messageHandlers = new ArrayList<>();
+        this.rateLimiter = rateLimiter;
     }
 
     @Override
     public void Handle(HttpContext ctx) {
         List<String> requiredParams = getRequiredMessageParameters();
-
         Message message = new Message();
+
+        if (!rateLimiter.shouldAllowAccess(ctx.getIp())){
+            ctx.setStatus(429);
+            ctx.result("Rate Limit Exceeded");
+            return;
+        }
 
         // Check required params exist
         if (!ctx.checkParamExists(requiredParams)) {

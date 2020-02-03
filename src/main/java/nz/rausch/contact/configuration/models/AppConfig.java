@@ -1,9 +1,12 @@
 package nz.rausch.contact.configuration.models;
 
+import nz.rausch.contact.http.ratelimiter.RateLimiterConfiguration;
+
 public class AppConfig {
     private String toEmail;
     private String toName;
     private MailjetConfig mailjetConfig;
+    private RateLimiterConfiguration rateLimiter;
     private Integer port;
 
     public String getToEmail() {
@@ -36,5 +39,13 @@ public class AppConfig {
 
     public void setPort(Integer port) {
         this.port = port;
+    }
+
+    public RateLimiterConfiguration getRateLimiter() {
+        return rateLimiter;
+    }
+
+    public void setRateLimiter(RateLimiterConfiguration rateLimiter) {
+        this.rateLimiter = rateLimiter;
     }
 }

@@ -5,3 +5,6 @@ port: 8000
 mailjetConfig:
   publicKey: "XXX"
   privateKey: "YYY"
+
+rateLimiter:
+  cooldown: 1000

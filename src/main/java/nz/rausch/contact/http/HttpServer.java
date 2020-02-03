@@ -1,7 +1,7 @@
 package nz.rausch.contact.http;
 
 public abstract class HttpServer {
-    private Integer port;
+    private final Integer port;
 
     public HttpServer(Integer port) {
         this.port = port;

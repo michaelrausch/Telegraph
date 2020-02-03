@@ -3,16 +3,10 @@ package nz.rausch.contact;
 import nz.rausch.contact.configuration.AppConfigLoader;
 import nz.rausch.contact.configuration.exception.ConfigLoadException;
 import nz.rausch.contact.configuration.models.AppConfig;
-import nz.rausch.contact.http.HttpContext;
 import nz.rausch.contact.http.HttpServer;
 import nz.rausch.contact.http.javalin.JavalinHttpServer;
-import nz.rausch.contact.messaging.*;
-import nz.rausch.contact.messaging.exceptions.MessageSendException;
-import nz.rausch.contact.messaging.exceptions.ValidationException;
-import nz.rausch.contact.messaging.mailjet.MailjetMessageHandler;
-
-import java.util.ArrayList;
-import java.util.List;
+import nz.rausch.contact.http.ratelimiter.RateLimiter;
+import nz.rausch.contact.http.ratelimiter.SystemClock;
 
 public class Server {
     private static final String PATH = "/";
@@ -28,7 +22,8 @@ public class Server {
         }
 
         HttpServer server = new JavalinHttpServer(configuration.getPort());
+        RateLimiter rateLimiter = new RateLimiter(configuration.getRateLimiter(), new SystemClock());
         server.start();
-        server.post(PATH, new ContactPostHandler(configuration));
+        server.post(PATH, new ContactPostHandler(configuration, rateLimiter));
     }
 }
