@@ -39,13 +39,6 @@ public class ContactPostHandler implements HttpHandler {
 
         logger.debug("New Request from IP " + ctx.getIp());
 
-        if (!rateLimiter.shouldAllowAccess(ctx.getIp())){
-            ctx.setStatus(429);
-            ctx.result("Rate Limit Exceeded");
-            logger.info("Request from IP " + ctx.getIp() + " blocked, rate limit exceeded");
-            return;
-        }
-
         // Check required params exist
         if (!ctx.checkParamExists(requiredParams)) {
             logger.debug("Request missing required parameters ");
@@ -62,6 +55,13 @@ public class ContactPostHandler implements HttpHandler {
             logger.debug("Request validation failed ");
             ctx.setStatus(400);
             ctx.result(e.getMessage());
+            return;
+        }
+
+        if (!rateLimiter.shouldAllowAccess(ctx.getIp())){
+            ctx.setStatus(429);
+            ctx.result("Rate Limit Exceeded");
+            logger.info("Request from IP " + ctx.getIp() + " blocked, rate limit exceeded");
             return;
         }
 

@@ -104,6 +104,7 @@ public class ContactPostHandlerTest {
     @Test
     public void checkRateLimitErrorWhenRateLimitHit() {
         when(context.getIp()).thenReturn(RATELIMIT_IP_DENY);
+        when(context.checkParamExists(any(List.class))).thenReturn(true);
         contactHandler.Handle(context);
 
         verify(context).setStatus(429);

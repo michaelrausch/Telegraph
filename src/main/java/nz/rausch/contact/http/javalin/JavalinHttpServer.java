@@ -1,6 +1,7 @@
 package nz.rausch.contact.http.javalin;
 
 import io.javalin.Javalin;
+import io.javalin.core.util.Header;
 import nz.rausch.contact.http.HttpHandler;
 import nz.rausch.contact.http.HttpServer;
 
@@ -9,7 +10,9 @@ public class JavalinHttpServer extends HttpServer {
 
     public JavalinHttpServer(Integer port) {
         super(port);
-        app = Javalin.create();
+        app = Javalin.create(config -> {
+            config.enableCorsForAllOrigins();
+        });
     }
 
     @Override
