@@ -70,7 +70,7 @@ public class MessageTest {
         String email = "bob@example.com";
         String msg = "This is a test";
 
-        String expectedHtml = "<h3>Message From " + name + " (" + email + ")</h3><br/><br/>" + msg + "<br/><br/>Please do not reply to this email, send your response to " + email;
+        String expectedHtml = "<h3>Message From " + name + " (" + email + ")</h3><br/>" + msg + "<br/><br/>Please do not reply to this email, send your response to " + email;
 
         message.setName(name);
         message.setSenderAddress(email);
@@ -85,7 +85,7 @@ public class MessageTest {
         String email = "bob@example.com";
         String msg = "This is a test";
 
-        String expectedString = "Message From " + name + " (" + email + ")\n\n" + msg;
+        String expectedString = "Message From " + name + " (" + email + ")\n" + msg + "\n\nPlease do not reply to this email, send your response to " + email;
 
         message.setName(name);
         message.setSenderAddress(email);
