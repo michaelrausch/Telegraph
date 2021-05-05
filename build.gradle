@@ -3,7 +3,7 @@ plugins {
     id "jacoco"
 }
 
-group 'nz.rausch.contact'
+group 'au.telegraph'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -38,7 +38,7 @@ jacocoTestReport {
 
 task fatJar(type: Jar) {
     manifest {
-        attributes 'Main-Class': 'nz.rausch.contact.Server'
+        attributes 'Main-Class': 'au.telegraph.Server'
     }
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
