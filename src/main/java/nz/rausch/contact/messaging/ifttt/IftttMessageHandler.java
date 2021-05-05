@@ -1,5 +1,6 @@
 package nz.rausch.contact.messaging.ifttt;
 
+import nz.rausch.contact.configuration.models.ClientConfiguration;
 import nz.rausch.contact.http.client.HttpClient;
 import nz.rausch.contact.http.client.HttpResponse;
 import nz.rausch.contact.messaging.Message;
@@ -20,7 +21,7 @@ public class IftttMessageHandler implements MessageHandler {
     }
 
     @Override
-    public void send(Message message) throws MessageSendException {
+    public void send(Message message, ClientConfiguration clientConfiguration) throws MessageSendException {
         if (!configuration.getEnabled()) {
             return;
         }

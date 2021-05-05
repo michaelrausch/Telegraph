@@ -22,6 +22,7 @@ public class JavalinHttpContext extends HttpContext {
 
     @Override
     public HttpContext result(String resultString) {
+        getTelemetryData().logOk();
         context.result(resultString);
         return this;
     }
@@ -41,6 +42,7 @@ public class JavalinHttpContext extends HttpContext {
     @Override
     public HttpContext resultJson(String json) {
         this.contentType("application/json");
+        getTelemetryData().logOk();
         this.result(json);
         return this;
     }

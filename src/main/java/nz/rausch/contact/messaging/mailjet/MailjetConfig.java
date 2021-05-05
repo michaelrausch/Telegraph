@@ -4,8 +4,8 @@ public class MailjetConfig {
     private Boolean enabled;
     private String publicKey;
     private String privateKey;
-    private String recipientName;
-    private String mailToAddress;
+    private String fromEmail;
+    private String fromName;
 
     public String getPublicKey() {
         return publicKey;
@@ -23,27 +23,27 @@ public class MailjetConfig {
         this.privateKey = privateKey;
     }
 
-    public String getRecipientName() {
-        return recipientName;
-    }
-
-    public void setRecipientName(String recipientName) {
-        this.recipientName = recipientName;
-    }
-
-    public String getMailToAddress() {
-        return mailToAddress;
-    }
-
-    public void setMailToAddress(String mailToAddress) {
-        this.mailToAddress = mailToAddress;
-    }
-
     public Boolean getEnabled() {
         return enabled;
     }
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getFromEmail() {
+        return fromEmail;
+    }
+
+    public void setFromEmail(String fromEmail) {
+        this.fromEmail = fromEmail;
+    }
+
+    public String getFromName() {
+        return fromName;
+    }
+
+    public void setFromName(String fromName) {
+        this.fromName = fromName;
     }
 }

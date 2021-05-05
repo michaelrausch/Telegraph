@@ -4,11 +4,14 @@ import nz.rausch.contact.http.ratelimiter.RateLimiterConfiguration;
 import nz.rausch.contact.messaging.ifttt.IftttConfiguration;
 import nz.rausch.contact.messaging.mailjet.MailjetConfig;
 
+import java.util.List;
+
 public class AppConfig {
     private MailjetConfig mailjetConfig;
     private RateLimiterConfiguration rateLimiter;
     private Integer port;
     private IftttConfiguration ifttt;
+    private List<ClientConfiguration> clientList;
 
     public MailjetConfig getMailjetConfig() {
         return mailjetConfig;
@@ -40,5 +43,13 @@ public class AppConfig {
 
     public void setIfttt(IftttConfiguration ifttt) {
         this.ifttt = ifttt;
+    }
+
+    public List<ClientConfiguration> getClientList() {
+        return clientList;
+    }
+
+    public void setClientList(List<ClientConfiguration> clientList) {
+        this.clientList = clientList;
     }
 }

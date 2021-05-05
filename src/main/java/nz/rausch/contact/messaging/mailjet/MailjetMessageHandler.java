@@ -8,6 +8,7 @@ import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.errors.MailjetException;
 import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.resource.Emailv31;
+import nz.rausch.contact.configuration.models.ClientConfiguration;
 import nz.rausch.contact.messaging.Message;
 import nz.rausch.contact.messaging.MessageHandler;
 import nz.rausch.contact.messaging.exceptions.MessageSendException;
@@ -33,7 +34,7 @@ public class MailjetMessageHandler implements MessageHandler {
     }
 
     @Override
-    public void send(Message message) throws MessageSendException {
+    public void send(Message message, ClientConfiguration clientCfg) throws MessageSendException {
         MailjetRequest request;
         MailjetResponse response;
 
@@ -48,16 +49,15 @@ public class MailjetMessageHandler implements MessageHandler {
                 .property(Emailv31.MESSAGES, new JSONArray()
                 .put(new JSONObject()
                 .put(Emailv31.Message.FROM, new JSONObject()
-                .put("Email", configuration.getMailToAddress())
-                .put("Name", configuration.getRecipientName()))
+                .put("Email", configuration.getFromEmail())
+                .put("Name", configuration.getFromName()))
                 .put(Emailv31.Message.TO, new JSONArray()
                 .put(new JSONObject()
-                .put("Email", configuration.getMailToAddress())
-                .put("Name", configuration.getRecipientName())))
+                .put("Email", clientCfg.getMailTo())
+                .put("Name", clientCfg.getName())))
                 .put(Emailv31.Message.SUBJECT, SUBJECT)
                 .put(Emailv31.Message.TEXTPART, message.toString())
                 .put(Emailv31.Message.HTMLPART, message.asHtml())));
-
         try {
             response = client.post(request);
         } catch (MailjetSocketTimeoutException | MailjetException e) {

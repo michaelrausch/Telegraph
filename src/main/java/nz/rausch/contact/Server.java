@@ -9,6 +9,7 @@ import nz.rausch.contact.http.client.apacheclient.ApacheHttpClient;
 import nz.rausch.contact.http.javalin.JavalinHttpServer;
 import nz.rausch.contact.http.ratelimiter.RateLimiter;
 import nz.rausch.contact.http.ratelimiter.SystemClock;
+import nz.rausch.contact.messaging.ConsoleMessageHandler;
 import nz.rausch.contact.messaging.ifttt.IftttMessageHandler;
 import nz.rausch.contact.messaging.mailjet.MailjetMessageHandler;
 import org.slf4j.LoggerFactory;
@@ -42,8 +43,10 @@ public class Server {
 
         contactPostHandler.addMessageHandler(new MailjetMessageHandler(configuration.getMailjetConfig()));
         contactPostHandler.addMessageHandler(new IftttMessageHandler(configuration.getIfttt(), new ApacheHttpClient()));
+        contactPostHandler.addMessageHandler(new ConsoleMessageHandler());
 
         server.post(PATH, contactPostHandler);
+        server.get("/telemetry", new TelemetryHandler(configuration));
 
         server.start();
     }

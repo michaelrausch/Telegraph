@@ -10,6 +10,11 @@ import java.util.List;
  * Provides access to functions for handling the request and response
  */
 public abstract class HttpContext {
+    private TelemetryData telemetryData = TelemetryData.getInstance();
+
+    protected TelemetryData getTelemetryData() {
+        return TelemetryData.getInstance();
+    }
 
     /**
      * Get the IP Address from the request
@@ -81,6 +86,7 @@ public abstract class HttpContext {
     public HttpContext badRequest() {
         setStatus(400);
         result("Bad Request");
+        telemetryData.logFailed();
         return this;
     }
 
@@ -91,6 +97,7 @@ public abstract class HttpContext {
     public HttpContext ok() {
         setStatus(200);
         result("OK");
+        telemetryData.logOk();
         return this;
     }
 
@@ -101,6 +108,7 @@ public abstract class HttpContext {
     public HttpContext serverError() {
         setStatus(500);
         result("Internal Server Error");
+        telemetryData.logFailed();
         return this;
     }
 
@@ -113,6 +121,7 @@ public abstract class HttpContext {
     public HttpContext accept() {
         setStatus(202);
         result("OK");
+        telemetryData.logOk();
         return this;
     }
 }
