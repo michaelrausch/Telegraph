@@ -3,14 +3,14 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/01b62ede33372d1c44f7/maintainability)](https://codeclimate.com/github/michaelrausch/Telegraph/maintainability)
 [![codecov](https://codecov.io/gh/michaelrausch/Telegraph/branch/master/graph/badge.svg)](https://codecov.io/gh/michaelrausch/Telegraph)
 
-Telegraph is a simple contact form API.
+Telegraph is a simple, yet extendable contact form API designed for web developers.
 
 ### Key Features
 - Mailjet & IFTTT integrations.
 - Support for multiple websites with different recipients.
+- Extendable API
 
 ### Setup
-**Note: This is still a WIP and probably shouldn't be used in production yet.**
 
 **1. Clone this repo**
 
@@ -23,7 +23,6 @@ Telegraph is a simple contact form API.
 **3. Get an API keys for Mailjet and/or IFTTT**
 
 **4. Paste your API keys into config.yaml and fill out the rest of your information**
-- Add a cooldown (in seconds) to requests by adjusting the cooldown on rateLimiter
 
 **5. Add your recipients to clientList**
 Note: In this current version there is some weird terminology (like publickey) that will be replaced in an upcoming version. Publickey is the value used in realm in your request.
@@ -49,16 +48,56 @@ Note: In this current version there is some weird terminology (like publickey) t
 Basic telemetry can be accessed by opening /telemetry. 
 
 ### Adding message handlers
-1. Add a new package under au.telegraph.messaging
-2. Create class called YourMessageHandler that implements MessageHandler, and optionally YourConfig which should be a POJO if you want to add configuration.
-4. Implement the send(Message, ClientConfiguration) method, throw a MessageSendException if this fails
-- Message will contain the message sent from the client, and the ClientConfiguration will contain the recipient information
-6. Add your config POJO as a private var in AppConfig, and add a getter/setter.
-7. Add your handler using contactPostHandler.addMessageHandler(MessageHandler) in Server.java.
+
+Create a class that implements MessageHandler and add this to the contactFormHandler in Server.java. You will recieve a Message containing the contact form submission, and a ClientConfiguration containing the recipient details. Here's a simple console example: 
+
+```
+package au.telegraph.messaging;
+
+import au.telegraph.configuration.models.ClientConfiguration;
+
+/**
+ * Prints messages to the console
+ */
+public class ConsoleMessageHandler implements MessageHandler {
+    @Override
+    public void send(Message message, ClientConfiguration clientConfiguration) {
+        System.out.println("---- MESSAGE ----");
+        System.out.println("From: " + message.getSenderAddress());
+        System.out.println("From: " + message.getName());
+        System.out.println("Message: " + message.getMessage());
+        System.out.println("ClientRealmPK: " + clientConfiguration.getPublicKey());
+        System.out.println("ClientName: " + clientConfiguration.getName());
+        System.out.println("ClientEmail: " + clientConfiguration.getMailTo());
+    }
+}
+```
+
 
 ### Adding Endpoints
-1. Create a handler called YourHandler that implements HttpHandler
-2. Set up your handler and call server.get(path, handler) or server.post(...,...) in Server.java
-3. Implement Handle(HttpContext ctx)
 
-This http server is based on Javalin but has some extended functionality. 
+Create a class that implements HttpHandler and then call server.get/post("", Handler). Here's an example:
+
+Note: The default HTTP Server is Javalin, but has some extended functionality. You can also swap out the HTTP server to something else by extending HttpServer and HttpContext.
+
+```
+public class ExampleHandler implements HttpHandler {
+    private static Logger logger = LoggerFactory.getLogger(TelemetryHandler.class.getName());
+    private AppConfig config;
+
+    public TelemetryHandler(AppConfig configuration) {
+        logger.info("Loading Example Handler");
+
+        config = configuration;
+    }
+
+    @Override
+    public void Handle(HttpContext ctx) {
+        if (!ctx.checkParamExists("test_parameter")){
+            ctx.badRequest();
+            return;
+        }
+
+        ctx.result("Hello,  World");
+    }
+```
