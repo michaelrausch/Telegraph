@@ -78,8 +78,7 @@ public class ConsoleMessageHandler implements MessageHandler {
 
 Create a class that implements HttpHandler and then call server.get/post("", Handler). Here's an example:
 
-Note: The default HTTP Server is Javalin, but has some extended functionality. You can also swap out the HTTP server to something else by extending HttpServer and HttpContext.
-
+Note: Make sure you implement HttpServer and HttpContext from au.telegraph.http and NOT from Javalin
 ```
 public class ExampleHandler implements HttpHandler {
     private static Logger logger = LoggerFactory.getLogger(TelemetryHandler.class.getName());
